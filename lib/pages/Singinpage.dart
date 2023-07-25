@@ -4,17 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 
 import '../componments/Tfield.dart';
+import 'Loginpage.dart';
+import 'homepage.dart';
 
 class SingINpage extends StatelessWidget {
   SingINpage({super.key});
+
+
   final usernamcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
   final cpasswordcontroller = TextEditingController();
   var formkey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,29 +73,15 @@ class SingINpage extends StatelessWidget {
                       hintext: "Conform Password",
                       obssecuretext: true),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
                     onTap: () {
                       if (passwordcontroller.text == cpasswordcontroller.text) {
-                        if (formkey.currentState!.validate()) {
-                          FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: usernamcontroller.text,
-                                  password: passwordcontroller.text)
-                              .then((value) {
-                            FirebaseFirestore.instance
-                                .collection("login")
-                                .doc(value.user!.uid)
-                                .set({
-                              "id": value.user!.uid,
-                              "name": usernamcontroller.text,
-                              "pass": passwordcontroller.text,
-                            });
-                          });
-                        }
-                      } else {
+
+                        _signInWithEmailAndPassword();
+                       } else {
                         Get.snackbar(
                           "Password",
                           "password Dose not match",
@@ -125,9 +116,9 @@ class SingINpage extends StatelessWidget {
                   GestureDetector(
                     child: const Text("Login!"),
                     onTap: () {
-                      // Get.to(Loginpage(),
-                      //     transition: Transition.fade,
-                      //     duration: Duration(seconds: 1));
+                      Get.to(Loginpage(),
+                          transition: Transition.fade,
+                          duration: Duration(seconds: 1));
                     },
                   ),
                 ],
@@ -137,5 +128,21 @@ class SingINpage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signInWithEmailAndPassword() async {
+    await Firebase.initializeApp();
+    FirebaseAuth.instance.createUserWithEmailAndPassword(email: usernamcontroller.text, password: passwordcontroller.text).then((value) {
+      FirebaseFirestore.instance.collection("login").doc(value.user!.uid).set(
+          { "id": value.user!.uid,
+            "name":usernamcontroller.text,
+            "pass":passwordcontroller.text
+
+          });
+      Get.to(Loginpage(),
+          transition: Transition.fade,
+          duration: Duration(seconds: 1));
+        Get.snackbar("login", "login your account");
+    });
   }
 }

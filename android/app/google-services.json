@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "658519831274",
+    "project_id": "trinreg-2155d",
+    "storage_bucket": "trinreg-2155d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658519831274:android:7a2bbfe91e70da74245d93",
+        "android_client_info": {
+          "package_name": "com.example.railway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658519831274-igo80utgr41sjh82mtp2u1716oatj8en.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXkqW6xZYzTiciiEZO2jISEtLjwpOluMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658519831274-igo80utgr41sjh82mtp2u1716oatj8en.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

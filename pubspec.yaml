@@ -47,10 +47,16 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   get:
   curved_navigation_bar: ^1.0.3
+  firebase_dynamic_links:
   firebase_core: ^2.15.0
-
+  flutter_datetime_picker:
   cloud_firestore: ^4.8.3
   ticket_widget: ^0.0.1
+  flutter_neumorphic:
+  neon:
+  slide_to_act:
+  awesome_card: ^1.1.7
+  google_fonts: ^5.1.0
   firebase_auth: ^4.7.1
 
 # For information on the generic Dart part of this file, see the

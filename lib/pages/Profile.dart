@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-import '../pages/Loginpage.dart';
+import 'Loginpage.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});

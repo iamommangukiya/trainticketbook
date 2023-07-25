@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Tfield extends StatelessWidget {
   final String hintext;
   final String valistring;
-  final controller;
+   final controller;
   final bool obssecuretext;
 
   const Tfield(
@@ -11,18 +11,15 @@ class Tfield extends StatelessWidget {
       required this.hintext,
       required this.valistring,
       this.controller,
-      required this.obssecuretext});
+      required this.obssecuretext,  });
+
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: TextFormField(
-        validator: (value) {
-          if (value!.length < 0) {
-            return valistring;
-          }
-        },
+      child: TextField(
+
         controller: controller,
         obscureText: obssecuretext,
         decoration: InputDecoration(

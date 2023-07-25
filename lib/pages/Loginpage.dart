@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:railway/pages/admin.dart';
 
 import '../componments/Tfield.dart';
 import '../componments/bottomnavigationbar.dart';
 import 'homepage.dart';
 import '../componments/my_btn.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'Singinpage.dart';
 
 class Loginpage extends StatelessWidget {
@@ -13,6 +16,39 @@ class Loginpage extends StatelessWidget {
       Get.put(BottomnavigationbarController());
   final usernamcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
+  Future<void> _signInWithEmailAndPassword(BuildContext context) async {
+    if (usernamcontroller.text == "admin" &&
+        passwordcontroller.text == "admin") {
+      Get.to(AdminPage(),
+          transition: Transition.upToDown,
+          duration: Duration(milliseconds: 500));
+    } else {
+      try {
+        // Get the email and password from the TextEditingControllers
+        String email = usernamcontroller.text.trim();
+        String password = passwordcontroller.text;
+
+        // Use FirebaseAuth to sign in with email and password
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+
+        // If sign-in is successful, userCredential.user will not be null.
+        // You can do additional tasks here, like navigating to the home page.
+        if (userCredential.user != null) {
+          bottomnavigationbarController.cahngeIndex(0);
+          print('Sign in successful');
+          Get.to(Homepage(),
+              transition: Transition.downToUp,
+              duration: Duration(milliseconds: 500));
+        }
+      } catch (e) {
+        // Handle sign-in errors, e.g., wrong password, user not found, etc.
+        Get.snackbar("Username or password inccorect", "Authentication");
+        // You can show a snackbar or dialog to display the error message to the user.
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,14 +105,9 @@ class Loginpage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  My_btn(
-                    onTap: () {
-                      Get.to(const Homepage(),
-                          transition: Transition.fade,
-                          duration: Duration(seconds: 1));
-                      bottomnavigationbarController.selectdindex(0);
-                    },
-                  ),
+                  My_btn(onTap: () {
+                    _signInWithEmailAndPassword(context);
+                  }),
 
                   //password
                   //singinbtn
@@ -89,8 +120,8 @@ class Loginpage extends StatelessWidget {
                         ),
                         onTap: () => {
                               Get.to(SingINpage(),
-                                  transition: Transition.fade,
-                                  duration: Duration(seconds: 1)),
+                                  transition: Transition.fadeIn,
+                                  duration: Duration(milliseconds: 500))
                             }),
                   )
                 ],
@@ -101,4 +132,14 @@ class Loginpage extends StatelessWidget {
       ),
     );
   }
+  // void _signInWithEmailAndPassword()async {
+  //    await Firebase.initializeApp();
+  //    User? user=   FirebaseAuth.instance.signInWithEmailAndPassword(email: usernamcontroller.text.trim(), password: passwordcontroller.text.trim()) as User?;
+  //
+  //    if(user != null){
+  //      // Get.to(Homepage(),transition: Transition.fadeIn, duration: Duration(milliseconds: 500) ) ;
+  //    }
+  //    else{
+  //      Get.snackbar("Username or password incorrect" , "plese correct");
+  //    }
 }
