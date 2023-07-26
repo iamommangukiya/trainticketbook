@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import "package:get/get.dart";
+import 'package:railway/pages/Book.dart';
 import 'package:railway/pages/crrditcard.dart';
 import 'bokked.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -22,7 +23,8 @@ class _HomepageState extends State<Homepage> {
 
   final screens = [
     Serch_page(),
-    Credit_card_page(),
+    // Credit_card_page(),
+    Book(),
     Profile(),
   ];
 

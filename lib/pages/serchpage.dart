@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
 
 import 'package:get/get.dart';
 
@@ -18,6 +18,8 @@ class Serch_page extends StatefulWidget {
 }
 
 class _Serch_pageState extends State<Serch_page> {
+  TextEditingController _fromcontroller = TextEditingController();
+  TextEditingController _tocontroller = TextEditingController();
   BottomnavigationbarController bottomnavigationbarController =
       Get.put(BottomnavigationbarController());
   @override
@@ -95,7 +97,7 @@ class _Serch_pageState extends State<Serch_page> {
                   SizedBox(
                     height: 10,
                   ),
-                  TextField(),
+                  TextField(controller: _tocontroller),
                   SizedBox(
                     height: 20,
                   ),
@@ -106,16 +108,27 @@ class _Serch_pageState extends State<Serch_page> {
                   SizedBox(
                     height: 10,
                   ),
-                  TextField(),
+                  TextField(
+                    controller: _fromcontroller,
+                  ),
                   SizedBox(
                     height: 30,
                   ),
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(Result_page(),
-                            transition: Transition.fade,
-                            duration: Duration(seconds: 1));
+                        if (_tocontroller.text.isEmpty &&
+                            _fromcontroller.text.isEmpty) {
+                          Get.snackbar(
+                              "Enter valid details", "Empty fild not allowd");
+                        } else {
+                          Get.to(
+                              Result_page(
+                                  inFromcity: _tocontroller.text.trim(),
+                                  intoCity: _fromcontroller.text.trim()),
+                              transition: Transition.fade,
+                              duration: Duration(seconds: 1));
+                        }
                       },
                       child: Container(
                         padding: const EdgeInsets.all(15),
@@ -153,8 +166,14 @@ class _Serch_pageState extends State<Serch_page> {
                 textAlign: TextAlign.left,
               ),
             ),
-            Listcard(),
-            Listcard()
+            Listcard(
+              placefrom: "Delhi",
+              placeto: "mumbai",
+              timestart: "8:00AM",
+              timeend: "9:00Pm",
+              traname: "rajdhani",
+              price: "700",
+            ),
           ]),
         ),
       ),

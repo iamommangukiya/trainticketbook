@@ -5,12 +5,25 @@ import 'package:ticket_widget/ticket_widget.dart';
 import 'package:get/get.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class Listcard extends StatefulWidget {
-  @override
-  State<Listcard> createState() => _ListcardState();
-}
+class Listcard extends StatelessWidget {
+  final String placefrom;
+  final String placeto;
+  final String timestart;
+  final String timeend;
 
-class _ListcardState extends State<Listcard> {
+  final String price;
+
+  final String traname;
+
+  const Listcard(
+      {super.key,
+      required this.placefrom,
+      required this.placeto,
+      required this.price,
+      required this.traname,
+      required this.timestart,
+      required this.timeend});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,11 +49,11 @@ class _ListcardState extends State<Listcard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Tickets",
+                    traname,
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "\$300",
+                    price,
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -54,7 +67,7 @@ class _ListcardState extends State<Listcard> {
               Row(
                 children: [
                   Text(
-                    "Delhi",
+                    placefrom,
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -67,9 +80,14 @@ class _ListcardState extends State<Listcard> {
                   SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    "Mumbai",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Text(
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
+                      placeto,
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
@@ -78,7 +96,7 @@ class _ListcardState extends State<Listcard> {
                 child: Row(
                   children: [
                     Text(
-                      "8:00AM",
+                      timestart,
                       style: TextStyle(fontSize: 18),
                     ),
                     SizedBox(
@@ -92,7 +110,7 @@ class _ListcardState extends State<Listcard> {
                       width: 6,
                     ),
                     Text(
-                      "3:00PM",
+                      timeend,
                       style: TextStyle(fontSize: 18),
                     ),
                   ],

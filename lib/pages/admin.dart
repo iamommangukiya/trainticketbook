@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:neon/neon.dart';
@@ -30,23 +33,35 @@ const neonGreyColor = MaterialColor(
 const int _neonGreyPrimaryValue = 0xFF808080;
 
 class _AdminPageState extends State<AdminPage> {
-  TextEditingController _timeController = TextEditingController();
+  TextEditingController _tStartController = TextEditingController();
   TextEditingController _placeToController = TextEditingController();
   TextEditingController _placeFromController = TextEditingController();
+  TextEditingController _tEndController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
+  String? _fromselectedCity;
+  String? tname;
+
+  String? _selectedCity;
+  TextEditingController _dateController = TextEditingController();
 
   void _submitData() {
     final firestoreInstance = FirebaseFirestore.instance;
-    String time = _timeController.text;
-    String placeTo = _placeToController.text;
-    String placeFrom = _placeFromController.text;
+    String timestart = _tStartController.text;
+    String timeend = _tEndController.text;
+    String date = _dateController.text;
+    String? tnmae1 = tname;
+    String? placeTo = _selectedCity;
+    String? placeFrom = _fromselectedCity;
     String price = _priceController.text;
 
-    if (time.isEmpty && placeFrom.isEmpty && placeTo.isEmpty && price.isEmpty) {
+    if (timestart.isEmpty && price.isEmpty && timeend.isEmpty) {
       Get.snackbar("Please Fill All Fields ", "Empty fields");
     } else {
-      firestoreInstance.collection('tdata').add({
-        'name': time,
+      firestoreInstance.collection('newtdata').add({
+        'date': date,
+        'timestart': timestart,
+        'timeend': timeend,
+        'tname': tnmae1,
         'price': price,
         'placeFrom': placeFrom,
         'placeTo': placeTo,
@@ -54,8 +69,11 @@ class _AdminPageState extends State<AdminPage> {
         Get.snackbar("data added successfuly", "Done");
         _priceController.clear();
         _placeFromController.clear();
+        _selectedCity = null;
+        _fromselectedCity = null;
+        _tEndController.clear();
         _placeToController.clear();
-        _timeController.clear();
+        _tStartController.clear();
       });
     }
   }
@@ -86,28 +104,112 @@ class _AdminPageState extends State<AdminPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextField(
-                    controller: _timeController,
+                  DateTimePicker(
+                    type: DateTimePickerType.date,
+                    controller: _dateController,
+                    dateMask: 'yyyy-MM-dd',
                     decoration: InputDecoration(
-                      labelText: 'Time',
-                      hintText: 'Enter time',
+                      labelText: 'Date',
                     ),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    onChanged: (val) =>
+                        setState(() => _dateController.text = val),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Date field is required.';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
-                  TextField(
-                    controller: _placeToController,
-                    decoration: InputDecoration(
-                        labelText: 'Place To',
-                        hintText: 'Enter place to',
-                        focusColor: Colors.white),
+                  DateTimePicker(
+                    type: DateTimePickerType.time,
+                    controller: _tStartController,
+                    timeLabelText: 'Start Time',
+                    onChanged: (val) =>
+                        setState(() => _tStartController.text = val),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Start Time field is required.';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
-                  TextField(
-                    controller: _placeFromController,
-                    decoration: InputDecoration(
-                      labelText: 'Place From',
-                      hintText: 'Enter place from',
-                    ),
+                  DateTimePicker(
+                    type: DateTimePickerType.time,
+                    controller: _tEndController,
+                    timeLabelText: 'End Time',
+                    onChanged: (val) =>
+                        setState(() => _tEndController.text = val),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'End Time field is required.';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: 'place to'),
+                    value: _selectedCity,
+                    items: [
+                      DropdownMenuItem(
+                          value: "Ahemdabad", child: Text("Ahemdabad")),
+                      DropdownMenuItem(value: "Amreli", child: Text("Amreli")),
+                      DropdownMenuItem(
+                          value: "Bhavnagar", child: Text("Bhavnagar")),
+                      DropdownMenuItem(
+                          value: "Bharuch", child: Text("Bharuch")),
+                      DropdownMenuItem(value: "Bhuj", child: Text("Bhuj")),
+                      DropdownMenuItem(value: "Dwarka", child: Text("Dwarka")),
+
+                      DropdownMenuItem(value: "Godhra", child: Text("Godhra")),
+                      // Add more cities here
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCity = value.toString();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'City field is required.';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: 'place from'),
+                    value: _fromselectedCity,
+                    items: [
+                      DropdownMenuItem(value: "Surat", child: Text("surat")),
+                      DropdownMenuItem(
+                          value: "Planpur", child: Text("palanpur")),
+                      DropdownMenuItem(value: "Mumbai", child: Text("Mumbai")),
+                      DropdownMenuItem(
+                          value: "Kanyakumari", child: Text("Kanyakumari")),
+                      DropdownMenuItem(
+                          value: "Tamilnadu", child: Text("Tamilnadu")),
+                      DropdownMenuItem(value: "MP", child: Text("Mp")),
+
+                      DropdownMenuItem(
+                          value: "Kashmir", child: Text("Kashmir")),
+                      // Add more cities here
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _fromselectedCity = value.toString();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'City field is required.';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
                   TextField(

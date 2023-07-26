@@ -49,12 +49,14 @@ dev_dependencies:
   curved_navigation_bar: ^1.0.3
   firebase_dynamic_links:
   firebase_core: ^2.15.0
-  flutter_datetime_picker:
+  date_time_picker: ^2.0.0
   cloud_firestore: ^4.8.3
   ticket_widget: ^0.0.1
   flutter_neumorphic:
   neon:
   slide_to_act:
+  flutter_form_builder: ^7.0.0
+
   awesome_card: ^1.1.7
   google_fonts: ^5.1.0
   firebase_auth: ^4.7.1

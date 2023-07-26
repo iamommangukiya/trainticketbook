@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -70,10 +71,7 @@ class Profile extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(Loginpage(),
-                    transition: Transition.upToDown,
-                    duration: Duration(seconds: 1));
-                Get.snackbar("Logout!", "Logout successfully");
+                _signOut();
               },
               child: Container(
                 padding: const EdgeInsets.all(25),
@@ -101,5 +99,17 @@ class Profile extends StatelessWidget {
         ),
       ))),
     );
+  }
+
+  Future<void> _signOut() async {
+    try {
+      // Use FirebaseAuth to sign out the current user
+      await FirebaseAuth.instance.signOut();
+      Get.to(Loginpage(),
+          transition: Transition.upToDown, duration: Duration(seconds: 1));
+      Get.snackbar("Logout!", "Logout successfully");
+    } catch (e) {
+      print('Error occurred while logging out: $e');
+    }
   }
 }

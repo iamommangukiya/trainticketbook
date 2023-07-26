@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_card/awesome_card.dart';
+import 'package:railway/componments/liste.dart';
 import 'package:railway/pages/homepage.dart';
+import 'package:railway/pages/result.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 import '../componments/bottomnavigationbar.dart';
 
-class Credit_card_page extends StatefulWidget {
-  const Credit_card_page({super.key});
+class Credit_card_page extends StatelessWidget {
+  final Trip? trip;
 
-  @override
-  State<Credit_card_page> createState() => _Credit_card_pageState();
-}
-
-class _Credit_card_pageState extends State<Credit_card_page> {
+  Credit_card_page({required this.trip});
   @override
   BottomnavigationbarController bottomnavigationbarController =
       Get.put(BottomnavigationbarController());
+
   final slideActionKey = GlobalKey<SlideActionState>();
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -42,6 +42,14 @@ class _Credit_card_pageState extends State<Credit_card_page> {
                   textExpDate: 'Exp. Date',
                   textName: 'Name',
                   textExpiry: 'MM/YY'),
+              Listcard(
+                placefrom: trip!.fromcity,
+                placeto: trip!.tocity,
+                timestart: trip!.starttime,
+                timeend: trip!.endtime,
+                traname: "Railway",
+                price: trip!.price,
+              ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
