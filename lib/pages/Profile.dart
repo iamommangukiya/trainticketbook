@@ -73,6 +73,7 @@ class Profile extends StatelessWidget {
                 Get.to(Loginpage(),
                     transition: Transition.upToDown,
                     duration: Duration(seconds: 1));
+                Get.snackbar("Logout!", "Logout successfully");
               },
               child: Container(
                 padding: const EdgeInsets.all(25),

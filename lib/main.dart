@@ -22,8 +22,8 @@ class Myapp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: Main_page(),
-      home: Credit_card_page(),
+      home: Main_page(),
+      // home: Credit_card_page(),
     );
   }
 }

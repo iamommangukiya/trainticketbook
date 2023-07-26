@@ -14,12 +14,10 @@ import 'homepage.dart';
 class SingINpage extends StatelessWidget {
   SingINpage({super.key});
 
-
   final usernamcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
   final cpasswordcontroller = TextEditingController();
   var formkey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +77,8 @@ class SingINpage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       if (passwordcontroller.text == cpasswordcontroller.text) {
-
                         _signInWithEmailAndPassword();
-                       } else {
+                      } else {
                         Get.snackbar(
                           "Password",
                           "password Dose not match",
@@ -132,17 +129,18 @@ class SingINpage extends StatelessWidget {
 
   void _signInWithEmailAndPassword() async {
     await Firebase.initializeApp();
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: usernamcontroller.text, password: passwordcontroller.text).then((value) {
-      FirebaseFirestore.instance.collection("login").doc(value.user!.uid).set(
-          { "id": value.user!.uid,
-            "name":usernamcontroller.text,
-            "pass":passwordcontroller.text
-
-          });
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: usernamcontroller.text, password: passwordcontroller.text)
+        .then((value) {
+      FirebaseFirestore.instance.collection("login").doc(value.user!.uid).set({
+        "id": value.user!.uid,
+        "name": usernamcontroller.text,
+        "pass": passwordcontroller.text
+      });
       Get.to(Loginpage(),
-          transition: Transition.fade,
-          duration: Duration(seconds: 1));
-        Get.snackbar("login", "login your account");
+          transition: Transition.fade, duration: Duration(seconds: 1));
+      Get.snackbar("Account created successfully", "login your account");
     });
   }
 }
