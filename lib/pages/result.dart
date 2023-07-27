@@ -86,6 +86,7 @@ class Result_page extends StatelessWidget {
                     Get.to(Credit_card_page(trip: trip));
                   },
                   child: Listcard(
+                    visible: true,
                     placefrom: trip.fromcity,
                     placeto: trip.tocity,
                     timestart: trip.starttime,

@@ -18,6 +18,8 @@ class Serch_page extends StatefulWidget {
 }
 
 class _Serch_pageState extends State<Serch_page> {
+  String? _selectedCity;
+  String? _fromselectedCity;
   TextEditingController _fromcontroller = TextEditingController();
   TextEditingController _tocontroller = TextEditingController();
   BottomnavigationbarController bottomnavigationbarController =
@@ -94,22 +96,74 @@ class _Serch_pageState extends State<Serch_page> {
                     "From",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    height: 10,
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: 'place to'),
+                    value: _selectedCity,
+                    items: const [
+                      DropdownMenuItem(
+                          value: "Ahemdabad", child: Text("Ahemdabad")),
+                      DropdownMenuItem(value: "Amreli", child: Text("Amreli")),
+                      DropdownMenuItem(
+                          value: "Bhavnagar", child: Text("Bhavnagar")),
+                      DropdownMenuItem(
+                          value: "Bharuch", child: Text("Bharuch")),
+                      DropdownMenuItem(value: "Bhuj", child: Text("Bhuj")),
+                      DropdownMenuItem(value: "Dwarka", child: Text("Dwarka")),
+
+                      DropdownMenuItem(value: "Godhra", child: Text("Godhra")),
+                      // Add more cities here
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCity = value.toString();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'City field is required.';
+                      }
+                      return null;
+                    },
                   ),
-                  TextField(controller: _tocontroller),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text(
                     "To",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: 'place from'),
+                    value: _fromselectedCity,
+                    items: [
+                      DropdownMenuItem(value: "Surat", child: Text("surat")),
+                      DropdownMenuItem(
+                          value: "Planpur", child: Text("palanpur")),
+                      DropdownMenuItem(value: "Mumbai", child: Text("Mumbai")),
+                      DropdownMenuItem(
+                          value: "Kanyakumari", child: Text("Kanyakumari")),
+                      DropdownMenuItem(
+                          value: "Tamilnadu", child: Text("Tamilnadu")),
+                      DropdownMenuItem(value: "MP", child: Text("Mp")),
+
+                      DropdownMenuItem(
+                          value: "Kashmir", child: Text("Kashmir")),
+                      // Add more cities here
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _fromselectedCity = value.toString();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'City field is required.';
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(
                     height: 10,
-                  ),
-                  TextField(
-                    controller: _fromcontroller,
                   ),
                   SizedBox(
                     height: 30,
@@ -117,15 +171,15 @@ class _Serch_pageState extends State<Serch_page> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        if (_tocontroller.text.isEmpty &&
-                            _fromcontroller.text.isEmpty) {
+                        if (_selectedCity!.isEmpty &&
+                            _fromselectedCity!.isEmpty) {
                           Get.snackbar(
                               "Enter valid details", "Empty fild not allowd");
                         } else {
                           Get.to(
                               Result_page(
-                                  inFromcity: _tocontroller.text.trim(),
-                                  intoCity: _fromcontroller.text.trim()),
+                                  inFromcity: _fromselectedCity.toString(),
+                                  intoCity: _selectedCity.toString()),
                               transition: Transition.fade,
                               duration: Duration(seconds: 1));
                         }
@@ -167,6 +221,7 @@ class _Serch_pageState extends State<Serch_page> {
               ),
             ),
             Listcard(
+              visible: false,
               placefrom: "Delhi",
               placeto: "mumbai",
               timestart: "8:00AM",

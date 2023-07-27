@@ -154,7 +154,7 @@ class _AdminPageState extends State<AdminPage> {
                   DropdownButtonFormField<String>(
                     decoration: InputDecoration(labelText: 'place to'),
                     value: _selectedCity,
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                           value: "Ahemdabad", child: Text("Ahemdabad")),
                       DropdownMenuItem(value: "Amreli", child: Text("Amreli")),

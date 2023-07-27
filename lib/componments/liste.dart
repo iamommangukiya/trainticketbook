@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 class Listcard extends StatelessWidget {
   final String placefrom;
   final String placeto;
+  final bool visible;
   final String timestart;
   final String timeend;
 
@@ -22,7 +23,8 @@ class Listcard extends StatelessWidget {
       required this.price,
       required this.traname,
       required this.timestart,
-      required this.timeend});
+      required this.timeend,
+      required this.visible});
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +101,14 @@ class Listcard extends StatelessWidget {
                       timestart,
                       style: TextStyle(fontSize: 18),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
-                    Image(
+                    const Image(
                       image: AssetImage("lib/images/delete.png"),
                       width: 15,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     Text(
@@ -116,24 +118,27 @@ class Listcard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(const Book(),
-                      transition: Transition.fade,
-                      duration: Duration(seconds: 1));
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    "Book",
-                    style: TextStyle(fontSize: 25),
+              Visibility(
+                visible: visible,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(const Book(),
+                        transition: Transition.fade,
+                        duration: Duration(seconds: 1));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(10)),
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: const Text(
+                      "Book",
+                      style: TextStyle(fontSize: 25),
+                    ),
                   ),
                 ),
               ),
