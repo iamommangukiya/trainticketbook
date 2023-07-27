@@ -57,7 +57,7 @@ class Listcard extends StatelessWidget {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    price,
+                    "₹ " + price,
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class Listcard extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Row(
                   children: [
                     Text(
@@ -122,6 +122,10 @@ class Listcard extends StatelessWidget {
               ),
               const SizedBox(
                 height: 10,
+              ),
+              Text(
+                Date,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Visibility(
                 visible: visible,
