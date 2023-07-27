@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -86,7 +87,8 @@ class Result_page extends StatelessWidget {
                     Get.to(Credit_card_page(trip: trip));
                   },
                   child: Listcard(
-                    visible: true,
+                    Date: trip.date,
+                    visible: false,
                     placefrom: trip.fromcity,
                     placeto: trip.tocity,
                     timestart: trip.starttime,

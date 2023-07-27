@@ -221,6 +221,7 @@ class _Serch_pageState extends State<Serch_page> {
               ),
             ),
             Listcard(
+              Date: "07-04-2023",
               visible: false,
               placefrom: "Delhi",
               placeto: "mumbai",

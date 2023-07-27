@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 class Listcard extends StatelessWidget {
   final String placefrom;
   final String placeto;
+  final String Date;
   final bool visible;
   final String timestart;
   final String timeend;
@@ -24,7 +25,8 @@ class Listcard extends StatelessWidget {
       required this.traname,
       required this.timestart,
       required this.timeend,
-      required this.visible});
+      required this.visible,
+      required this.Date});
 
   @override
   Widget build(BuildContext context) {

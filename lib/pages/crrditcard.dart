@@ -43,6 +43,7 @@ class Credit_card_page extends StatelessWidget {
                   textName: 'Name',
                   textExpiry: 'MM/YY'),
               Listcard(
+                Date: trip!.date,
                 visible: false,
                 placefrom: trip!.fromcity,
                 placeto: trip!.tocity,
