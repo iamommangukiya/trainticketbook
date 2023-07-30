@@ -54,6 +54,7 @@ dev_dependencies:
   ticket_widget: ^0.0.1
   flutter_neumorphic:
   neon:
+  provider:
   slide_to_act:
   flutter_form_builder: ^7.0.0
 

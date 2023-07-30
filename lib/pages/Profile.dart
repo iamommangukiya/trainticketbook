@@ -2,103 +2,141 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'Loginpage.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class Profile extends StatefulWidget {
+  final String? userEmail;
+
+  Profile({this.userEmail});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // print(super.);
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Center(
-              child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 50),
-              child: Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        // image: AssetImage("./assets/profile.jpg"),
-                        image: AssetImage("lib/images/profile.jpg")),
-                    // color: Colors.red,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(50)),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Name: ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "Om Mangukiya",
-                  style: TextStyle(fontSize: 20),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Email: ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: Text(
-                    maxLines: 1,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    "Ommangukiya10123@gmail.com",
-                    style: TextStyle(fontSize: 20, overflow: TextOverflow.clip),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 100,
-            ),
-            GestureDetector(
-              onTap: () {
-                _signOut();
-              },
-              child: Container(
-                padding: const EdgeInsets.all(25),
-                margin: const EdgeInsets.symmetric(horizontal: 25),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Logout!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+        body: SafeArea(
+      child: FutureBuilder<User?>(
+          future: _getUserData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              User? user = snapshot.data;
+              if (user == null) {
+                // User is not signed in, show a login button or redirect to login page
+                return Text('User not signed in');
+              }
+              return Center(
+                  child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                // image: AssetImage("./assets/profile.jpg"),
+                                image: AssetImage("lib/images/profile.jpg")),
+                            // color: Colors.red,
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(50)),
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Name: ",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        // Text(
+                        //   'User Email: ${widget.userEmail ?? "Email not available"}',
+                        //   softWrap: true,
+                        //   style: TextStyle(fontSize: 20),
+                        // )
+                        Text(' ${user.email ?? 'N/A'}'),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Email: ",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: Text(
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                            ' ${user.email ?? 'N/A'} ',
+                            style: TextStyle(
+                                fontSize: 20, overflow: TextOverflow.clip),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _signOut();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(25),
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Logout!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
-      ))),
-    );
+              ));
+            }
+          }),
+    ));
   }
 
   Future<void> _signOut() async {
@@ -111,5 +149,10 @@ class Profile extends StatelessWidget {
     } catch (e) {
       print('Error occurred while logging out: $e');
     }
+  }
+
+  Future<User?> _getUserData() async {
+    User? user = _auth.currentUser;
+    return user;
   }
 }

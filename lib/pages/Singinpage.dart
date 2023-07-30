@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:railway/pages/Profile.dart';
 
 import '../componments/Tfield.dart';
 import 'Loginpage.dart';
@@ -18,6 +19,19 @@ class SingINpage extends StatelessWidget {
   final passwordcontroller = TextEditingController();
   final cpasswordcontroller = TextEditingController();
   var formkey = GlobalKey<FormState>();
+  void _signIn(BuildContext context) {
+    // Perform the sign-in logic here
+    String userEmail =
+        usernamcontroller.text; // Get the user's email from the input field
+
+    // Navigate to the profile page and pass the user's email as a route argument
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Profile(userEmail: userEmail),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 class Tfield extends StatelessWidget {
   final String hintext;
   final String valistring;
-   final controller;
+  final controller;
   final bool obssecuretext;
 
-  const Tfield(
-      {super.key,
-      required this.hintext,
-      required this.valistring,
-      this.controller,
-      required this.obssecuretext,  });
-
+  const Tfield({
+    super.key,
+    required this.hintext,
+    required this.valistring,
+    this.controller,
+    required this.obssecuretext,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextField(
-
+        autocorrect: true,
         controller: controller,
         obscureText: obssecuretext,
         decoration: InputDecoration(
