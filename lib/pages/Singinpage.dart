@@ -48,13 +48,11 @@ class SingINpage extends StatelessWidget {
                     height: 50,
                   ),
                   //logo
-                  Icon(
-                    Icons.lock,
-                    size: 100,
+                  Image(
+                    image: AssetImage("lib/images/loginimg.png"),
+                    height: 250,
                   ),
-                  const SizedBox(
-                    height: 50,
-                  ),
+
                   Text(
                     "welcome Create account!",
                     style: TextStyle(color: Colors.grey[700], fontSize: 16),

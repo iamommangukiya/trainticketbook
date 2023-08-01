@@ -2,9 +2,16 @@
 
 import 'package:get/get.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:flutter/src/widgets/container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:railway/componments/bottomnavigationbar.dart';
 import 'package:railway/componments/liste.dart';
@@ -19,11 +26,53 @@ class Serch_page extends StatefulWidget {
 
 class _Serch_pageState extends State<Serch_page> {
   String? _selectedCity;
+  String? _profileImageUrl;
+  String? _userID;
+  Timer? _timer;
   String? _fromselectedCity;
   TextEditingController _fromcontroller = TextEditingController();
   TextEditingController _tocontroller = TextEditingController();
   BottomnavigationbarController bottomnavigationbarController =
       Get.put(BottomnavigationbarController());
+  Future<void> _loadUserProfile() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      setState(() {
+        _userID = user.uid;
+      });
+
+      try {
+        final profileDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_userID)
+            .get();
+        if (profileDoc.exists) {
+          setState(() {
+            _profileImageUrl = profileDoc.data()?['profileImageUrl'];
+          });
+        }
+      } catch (e) {
+        print("Error loading profile picture: $e");
+      }
+    }
+
+    // Schedule the next update after 30 seconds (adjust the duration as needed)
+    Future.delayed(Duration(seconds: 5), () {
+      if (mounted) {
+        _loadUserProfile();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUserProfile();
+    // _timer = Timer.periodic(Duration(seconds: 15), (_) => _loadUserProfile());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,21 +106,10 @@ class _Serch_pageState extends State<Serch_page> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () {
-                        bottomnavigationbarController.selectdindex(2);
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                // image: AssetImage("./assets/profile.jpg"),
-                                image: AssetImage("lib/images/profile.jpg")),
-                            // color: Colors.red,
-
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
-                    ),
+                        onTap: () {
+                          bottomnavigationbarController.selectdindex(2);
+                        },
+                        child: _buildProfilePicture()),
                   ]),
             ),
             SizedBox(
@@ -234,5 +272,25 @@ class _Serch_pageState extends State<Serch_page> {
         ),
       ),
     );
+  }
+
+  Widget _buildProfilePicture() {
+    if (_profileImageUrl == null) {
+      return CircleAvatar(
+        backgroundImage: AssetImage("lib/images/user1.png"),
+        radius: 25,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      );
+    } else {
+      return Stack(
+        children: [
+          CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 0, 0, 0),
+            radius: 25,
+            backgroundImage: NetworkImage(_profileImageUrl!),
+          ),
+        ],
+      );
+    }
   }
 }

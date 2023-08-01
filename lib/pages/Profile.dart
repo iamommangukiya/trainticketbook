@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,11 +23,41 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String? _profileImageUrl;
+  String? _userID;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _loadUserProfile();
     // print(super.);
+  }
+
+  Future<void> _loadUserProfile() async {
+    // Get the current user from FirebaseAuth
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      setState(() {
+        _userID = user.uid;
+      });
+
+      // Load the profile picture URL from Firestore based on user ID
+      try {
+        final profileDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_userID)
+            .get();
+        if (profileDoc.exists) {
+          setState(() {
+            _profileImageUrl = profileDoc.data()?['profileImageUrl'];
+          });
+        }
+      } catch (e) {
+        print("Error loading profile picture: $e");
+      }
+    }
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -50,19 +85,12 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                // image: AssetImage("./assets/profile.jpg"),
-                                image: AssetImage("lib/images/profile.jpg")),
-                            // color: Colors.red,
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(50)),
-                      ),
-                    ),
+                        padding: EdgeInsets.only(top: 50),
+                        child: GestureDetector(
+                            onTap: () {
+                              _pickAndUploadImage();
+                            },
+                            child: _buildProfilePicture())),
                     SizedBox(
                       height: 50,
                     ),
@@ -154,5 +182,71 @@ class _ProfileState extends State<Profile> {
   Future<User?> _getUserData() async {
     User? user = _auth.currentUser;
     return user;
+  }
+
+  Widget _buildProfilePicture() {
+    if (_profileImageUrl == null) {
+      // Show circular progress indicator while loading profile picture
+      return Stack(
+        children: [
+          CircleAvatar(
+            backgroundImage: AssetImage("lib/images/user1.png"),
+            radius: 50,
+            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          ),
+          Container(
+              child: Icon(
+            Icons.add_a_photo,
+            color: Colors.grey,
+          ))
+        ],
+      );
+    } else {
+      // Show user's profile picture
+      return Stack(
+        children: [
+          CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 0, 0, 0),
+            radius: 50,
+            backgroundImage: NetworkImage(_profileImageUrl!),
+          ),
+          Container(
+              child: Icon(
+            Icons.add_a_photo,
+            color: Colors.grey,
+          ))
+        ],
+      );
+    }
+  }
+
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage == null) return;
+
+    final imageFile = File(pickedImage.path!);
+    final storageReference = FirebaseStorage.instance
+        .ref()
+        .child('profile_images')
+        .child('$_userID.jpg'); // Use the userID as part of the image name
+
+    await storageReference.putFile(imageFile);
+    final imageUrl = await storageReference.getDownloadURL();
+
+    // Save the profile picture URL to Firestore based on user ID
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_userID)
+          .set({'profileImageUrl': imageUrl});
+    } catch (e) {
+      print("Error uploading profile picture: $e");
+    }
+
+    setState(() {
+      _profileImageUrl = imageUrl;
+    });
   }
 }

@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:railway/pages/admin.dart';
 import 'package:railway/pages/crrditcard.dart';
+import 'package:railway/pages/intro.dart';
 import 'package:railway/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import the Firebase Core package
+import 'package:railway/pages/splash.dart';
 
 import 'pages/Loginpage.dart';
 
@@ -22,8 +24,8 @@ class Myapp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Main_page(),
-      // home: Credit_card_page(),
+      // home: Main_page(),
+      home: Splashscreen(),
     );
   }
 }

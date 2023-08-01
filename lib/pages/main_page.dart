@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:railway/pages/Loginpage.dart';
 import 'package:railway/pages/homepage.dart';
+import 'package:railway/pages/intro.dart';
 
 class Main_page extends StatelessWidget {
   const Main_page({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class Main_page extends StatelessWidget {
           } else {
             print("nodata");
             // User is not signed in, navigate to login page.
-            return Loginpage();
+            return Intro_page();
           }
         }
       },

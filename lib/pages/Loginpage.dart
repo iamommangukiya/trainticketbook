@@ -63,16 +63,14 @@ class Loginpage extends StatelessWidget {
                     height: 50,
                   ),
                   //logo
-                  Icon(
-                    Icons.lock,
-                    size: 100,
+                  Image(
+                    image: AssetImage("lib/images/loginimg.png"),
+                    height: 250,
                   ),
-                  SizedBox(
-                    height: 50,
-                  ),
+
                   Text(
                     "welcome back You've been missed!",
-                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                    style: TextStyle(color: Colors.grey[700], fontSize: 18),
                   ),
                   SizedBox(
                     height: 25,
